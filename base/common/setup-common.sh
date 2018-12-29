@@ -2,6 +2,8 @@
 # setup-common.sh
 # setup configs & install packages common to bare metal and virtual installs
 
+### TODO: Add check for if the script is running as root
+
 
 
 ### Items that apply to all (common) Linux distributions
@@ -19,7 +21,8 @@ EOT
 case $(lsb_release -ds) in
   *"Ubuntu 18.04"*)
     # Proceed for Ubuntu 18.04
-    echo "Ubuntu 18.04 test"
+    echo "Installing common packages..."
+    sudo apt install git screen smartmontools vim
     ;;
   *"CentOS Linux release 7"*)
     # Proceed for CentOS 7
