@@ -8,10 +8,13 @@
 
 ### Items that apply to all (common) Linux distributions
 
+hostname=read -p "Hostname:  "
+hostnamectl set-hostname $hostname
+
 # Define personal aliases and add to /etc/bash.bashrc to add for all users
 alias llblk="lsblk --output NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,SERIAL,UUID"
 cat <<EOT >> /etc/bash.bashrc
-# Long listing of block devices
+# Alias for long listing of block devices
 alias llblk="lsblk --output NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,SERIAL,UUID"
 EOT
 
@@ -22,7 +25,7 @@ case $(lsb_release -ds) in
   *"Ubuntu 18.04"*)
     # Proceed for Ubuntu 18.04
     echo "Installing common packages..."
-    sudo apt install git screen smartmontools vim
+    sudo apt install git screen smartmontools
     ;;
   *"CentOS Linux release 7"*)
     # Proceed for CentOS 7
