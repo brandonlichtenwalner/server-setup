@@ -2,8 +2,13 @@
 # setup-common.sh
 # setup configs & install packages common to bare metal and virtual installs
 
-### TODO: Add check for if the script is running as root
 
+# Make sure the script has been executed as root
+if [ "$USER" != 'root' ]; then
+        echo "This script must be run with root privileges."
+        echo "Try using: sudo $0 $@"
+        exit 2
+fi
 
 
 ### Items that apply to all (common) Linux distributions
@@ -18,6 +23,14 @@ cat <<EOT >> /etc/bash.bashrc
 alias llblk="lsblk --output NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,SERIAL,UUID"
 EOT
 
+# Add public key for Brandon after making sure the appropriate directory exists
+mkdir -p /home/brandon/.ssh
+
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDcLjkMBCaRdjp5ePpbuOYoBHIZKdaRU2IAp8ce5wD82xZBA9Y2Rgo5HWFX38YP7XQuij++fBMnuwCDE6vCZ8TX5Lnd8qpvNQxBBBigADOXxjU4Qp3m/BuU1T4F82enXGjGhZI50C4JbJaMkuAihXdF5dso2fVvBmYbUiqMdEnPcN2/3vDUPoU2N7h3B1s30CCeVeaieP7AT6n0z7lCG8Pcn25E+f/0xNg0bGKjkEln9mn3ctDIPe0oUBlVd5PX7dRiS6qNduM3OjAy8SDUooUeP2Kigr/hXWrGHnwUL6BOuzQS5Dhd47MSuyH/bgBFRuBFJKeiY5Si0fMlRDzZuCMYD5s/QR+Juw/ATAyKh08VHSQUBmvrgJ3k5r/v9s/DgYUCPFH1vADnEnqfP/DvCKrZLVoR2DtPDUibjsmJsBSwQ7MDpMJxm8UFYzs+J/ZF1rjlglcU1WnS9KBxz6MX/gdqOKfXDcTanGlK6BDGF1oxZ4wRRuphO/ZQtHtkZNVGMbTSwjrYnFIJ/hqPNUtnj1osifGaINUJqLyWNRGC+7s87ZWCkdpOHdEz2FCiBtfOmDVVkcwIo+XMmfePNYqbp+te2PFrflzlmZlWPRuIP+gdP44soGZlxqCUSdALXuSpHb5WlQdRb/0YzkMU2rN8ne3Q2w7z8aZFTQnj+lBjtP+7LQ== ThinkPad_W550s_UMBCTC" >> /home/brandon/.ssh/authorized_keys
+
+# Make sure SSH directory ownership and permissions are set correctly
+chown -R brandon:brandon /home/brandon/.ssh
+chmod -R go-rwx /home/brandon/.ssh
 
 
 ### Check which type of system we're on and act appropriately
