@@ -25,7 +25,7 @@ case $(lsb_release -ds) in
   *"Ubuntu 18.04"*)
     # Proceed for Ubuntu 18.04
     echo "Installing common packages..."
-    sudo apt install smartmontools
+    #sudo apt -y install 
     ;;
   *"CentOS Linux release 7"*)
     # Proceed for CentOS 7
