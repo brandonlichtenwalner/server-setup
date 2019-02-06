@@ -43,13 +43,35 @@ chmod -R go-rwx /home/brandon/.ssh
 case $(lsb_release -ds) in
   *"Ubuntu 18.04"*)
     # Proceed for Ubuntu 18.04
+
+    # add additional repositories
+    cat <<EOT >> /etc/apt/sources.list
+
+    deb http://archive.ubuntu.com/ubuntu bionic universe multiverse
+
+    deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
+    deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
+
+    deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
+    deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
+
+    deb http://security.ubuntu.com/ubuntu bionic-security universe
+    deb http://security.ubuntu.com/ubuntu bionic-security multiverse
+    EOT
+
+    echo "Updating system..."
+    apt update
+    apt -y full-upgrade
+
     echo "Installing common packages..."
     sudo apt -y install fail2ban
     ;;
+
   *"CentOS Linux release 7"*)
     # Proceed for CentOS 7
     echo "CentOS 7 test"
     ;;
+
   *)
     # Default case
     echo "WARNING: No actions defined for $(lsb_release -ds). Processing default actions only."
