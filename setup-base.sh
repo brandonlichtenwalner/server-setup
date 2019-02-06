@@ -45,7 +45,7 @@ case $(lsb_release -ds) in
     # Proceed for Ubuntu 18.04
 
     # add additional repositories
-    cat <<EOT >> /etc/apt/sources.list
+    cat <<-'    EOT' >> /etc/apt/sources.list
 
     deb http://archive.ubuntu.com/ubuntu bionic universe multiverse
 
