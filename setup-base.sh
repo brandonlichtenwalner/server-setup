@@ -65,6 +65,10 @@ case $(lsb_release -ds) in
 
     echo "Installing common packages..."
     sudo apt -y install fail2ban
+
+    echo "Cleaning up..."
+    sudo apt -y autoremove
+    sudo apt -y clean
     ;;
 
   *"CentOS Linux release 7"*)
