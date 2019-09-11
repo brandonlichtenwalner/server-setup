@@ -6,7 +6,10 @@
 GUACVERSION=1.0.0
 TOMCATVERSION=9
 
+
+
 # Get the files and check integrity
+
 wget http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/$GUACVERSION/binary/guacamole-$GUACVERSION.war
 wget https://www.apache.org/dist/guacamole/$GUACVERSION/binary/guacamole-$GUACVERSION.war.sha256
 
@@ -26,26 +29,33 @@ if [ $? != 0 ]; then
 fi
 
 
-# Update packages and install build environment
+
+# Update packages and install build environment, required packages, optional packages, and tomcat
 sudo apt -y update
-sudo apt -y install gcc-6 g++-6
+sudo apt -y install gcc-6 g++-6 \
+libcairo2-dev libjpeg-turbo8-dev libjpeg62-dev libpng12-dev libossp-uuid-dev \
+libfreerdp-dev libpango-1.0-dev libssh2-1-dev libvncserver-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev \
+tomcat$TOMCATVERSION tomcat$TOMCATVERSION-admin tomcat$TOMCATVERSION-user
 
-# Install required dependencies
-sudo apt -y install libcairo2-dev libjpeg-turbo8-dev libjpeg62-dev libpng12-dev libossp-uuid-dev
+if [ $? != 0 ]; then
+  echo "ERROR: Required packages failed to install!"
+  exit 1
+fi
 
-# Install optional dependencies
-sudo apt -y install libfreerdp-dev libpango-1.0-dev libssh2-1-dev libvncserver-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev
 
-# Install Tomcat
-sudo apt -y install tomcat$TOMCATVERSION tomcat$TOMCATVERSION-admin tomcat$TOMCATVERSION-user
 
-# Copy the .war file to the appropriate directory
+# Tomcat / guac-client configuration
+
+## Copy the .war file to the appropriate directory
 sudo cp guacamole-$GUACVERSION.war /var/lib/tomcat/webapps/guacamole.war
 
-# Restart tomcat to find the new file
+# Restart tomcat to load the .war file
 sudo systemctl restart tomcat
 
+
+
 # Build guacamole-server
+
 tar zxvf guacamole-server-$GUACVERSION.tar.gz
 cd guacamole-server-$GUACVERSION.tar.gz
 
@@ -53,8 +63,12 @@ cd guacamole-server-$GUACVERSION.tar.gz
 make CC=gcc-6
 sudo make install
 
-# Run ldconfig to create the necessary links and cahce to the most recent shared libraries
+## Run ldconfig to create the necessary links and cahce to the most recent shared libraries
 sudo ldconfig
 
-# enable/start guacd service
+## enable/start guacd service
 sudo systemctl enable --now guacd
+
+
+
+# TODO: configure (postgresql) database authentication
