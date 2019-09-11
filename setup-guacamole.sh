@@ -4,6 +4,7 @@
 
 # Written for Guacamole 1.0.0 on Ubuntu 18.04
 GUACVERSION=1.0.0
+TOMCATVERSION=9
 
 # Get the files and check integrity
 wget http://apache.org/dyn/closer.cgi?action=download&filename=guacamole/$GUACVERSION/binary/guacamole-$GUACVERSION.war
@@ -34,3 +35,26 @@ sudo apt -y install libcairo2-dev libjpeg-turbo8-dev libjpeg62-dev libpng12-dev 
 
 # Install optional dependencies
 sudo apt -y install libfreerdp-dev libpango-1.0-dev libssh2-1-dev libvncserver-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev
+
+# Install Tomcat
+sudo apt -y install tomcat$TOMCATVERSION tomcat$TOMCATVERSION-admin tomcat$TOMCATVERSION-user
+
+# Copy the .war file to the appropriate directory
+sudo cp guacamole-$GUACVERSION.war /var/lib/tomcat/webapps/guacamole.war
+
+# Restart tomcat to find the new file
+sudo systemctl restart tomcat
+
+# Build guacamole-server
+tar zxvf guacamole-server-$GUACVERSION.tar.gz
+cd guacamole-server-$GUACVERSION.tar.gz
+
+./configure --with-init-dir=/etc/init.d
+make CC=gcc-6
+sudo make install
+
+# Run ldconfig to create the necessary links and cahce to the most recent shared libraries
+sudo ldconfig
+
+# enable/start guacd service
+sudo systemctl enable --now guacd
