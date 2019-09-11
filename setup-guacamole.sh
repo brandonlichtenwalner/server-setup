@@ -30,7 +30,6 @@ fi
 
 
 # Update packages and install build environment, required packages, optional packages, and tomcat
-# NOTE: libjpeg62-dev not installed due to conflict with libjpeg-turbo8-dev
 # NOTE: optional screen recording packages not installed
 sudo apt -y update
 sudo apt -y install gcc-6 g++-6 \
@@ -48,18 +47,20 @@ fi
 # Tomcat / guac-client configuration
 
 ## Copy the .war file to the appropriate directory
-sudo cp guacamole-$GUACVERSION.war /var/lib/tomcat/webapps/guacamole.war
+sudo cp guacamole-$GUACVERSION.war /var/lib/tomcat$TOMCATVERSION/webapps/guacamole.war
 
 # Restart tomcat to load the .war file
-sudo systemctl restart tomcat
+sudo systemctl restart tomcat$TOMCATVERSION.service
 
 
 
 # Build guacamole-server
 
+## unpack files
 tar zxvf guacamole-server-$GUACVERSION.tar.gz
-cd guacamole-server-$GUACVERSION.tar.gz
+cd guacamole-server-$GUACVERSION
 
+## configure, make, and install
 ./configure --with-init-dir=/etc/init.d
 make CC=gcc-6
 sudo make install
