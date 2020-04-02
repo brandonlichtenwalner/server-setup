@@ -16,6 +16,6 @@ snap install syncthing
 wget https://raw.githubusercontent.com/syncthing/syncthing/master/etc/linux-systemd/system/syncthing%40.service -P /etc/systemd/system
 
 # Enable & start the Syncthing service
-systemctl enable --now syncthing.service
+systemctl enable --now syncthing@brandon.service
 
 echo "Finished executing $0"
