@@ -45,19 +45,7 @@ case $(lsb_release -ds) in
     # Proceed for Ubuntu 18.04
 
     # add additional repositories
-    cat <<-'    EOT' >> /etc/apt/sources.list
-
-    deb http://archive.ubuntu.com/ubuntu bionic universe multiverse
-
-    deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
-    deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
-
-    deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
-    deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
-
-    deb http://security.ubuntu.com/ubuntu bionic-security universe
-    deb http://security.ubuntu.com/ubuntu bionic-security multiverse
-    EOT
+    cp config/etc-apt-sources.list /etc/apt/sources.list
 
     echo "Updating system..."
     apt update
